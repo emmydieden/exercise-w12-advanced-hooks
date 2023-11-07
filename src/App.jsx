@@ -1,7 +1,28 @@
-import { useState } from "react";
+import { useState, useRef,  useLayoutEffect } from "react";
+import { UseReducerTest } from "./components/UseReducerTest";
+import {AddToDo } from "./components/AddToDo";
 
 export const App = () => {
   const [theme, setTheme] = useState("light");
+  const divRef = useRef();
+  
+  // const changeBgColor = () => {
+  //   divRef.current.style.backgroundColor = "red";
+  // }
+ 
+  const toggleTheme = () => {
+
+    if (theme === "light") {
+        setTheme("dark")
+    } else {
+      setTheme("light")
+    }
+  }
+
+  useLayoutEffect(() => {
+    document.body.className = theme;
+    divRef.current.style.backgroundColor = "red";
+  }, [theme])
 
   const lightPoem = `
   In realms where light does softly tread,
@@ -27,15 +48,33 @@ export const App = () => {
   return (
     <div className="App">
       Hello Coders!
-      <div>
+    
+      {theme === "light" && 
+      <div ref={divRef}>
         <h4>Light Poem</h4>
         <p>{lightPoem}</p>
-      </div>
-      <hr />
-      <div>
+      </div>}
+
+      
+      {theme === "dark" &&
+      <div ref={divRef}>
         <h4>Dark Poem</h4>
         <p>{darkPoem}</p>
-      </div>
+      </div>}
+
+      {theme === "light" ? (<div>
+        <h4>Light Poem</h4>
+        <p>{lightPoem}</p>
+      </div>) : (<div>
+        <h4>Dark Poem</h4>
+        <p>{darkPoem}</p>
+      </div>)}
+
+      <button onClick={toggleTheme}>Ändra dikt</button>
+      {/* <button onClick={changeBgColor}>Byt färg</button> */}
+      <UseReducerTest />
+      <AddToDo />
     </div>
+    
   );
 };
